@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What comes next in the sequence? 2, 4, 8, 16, ?",
+    "options": [
+      "18",
+      "24",
+      "32",
+      "20"
+    ],
+    "answer": "32"
+  },
+  {
+    "question": "Which shape is different from the others?",
+    "options": [
+      "Circle",
+      "Square",
+      "Triangle",
+      "Apple"
+    ],
+    "answer": "Apple"
+  },
+  {
+    "question": "If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops definitely Lazzies?",
+    "options": [
+      "Yes",
+      "No",
+      "Cannot Say",
+      "Sometimes"
+    ],
+    "answer": "Yes"
+  },
+  {
+    "question": "What number is missing: 1, 1, 2, 3, 5, 8, ?",
+    "options": [
+      "11",
+      "13",
+      "12",
+      "15"
+    ],
+    "answer": "13"
+  },
+  {
+    "question": "Which word doesn't belong?",
+    "options": [
+      "Dog",
+      "Cat",
+      "Lion",
+      "Car"
+    ],
+    "answer": "Car"
+  },
+  {
+    "question": "What comes next: J, F, M, A, M, J, J, ?",
+    "options": [
+      "A",
+      "S",
+      "O",
+      "D"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Which number is a square of an odd number?",
+    "options": [
+      "36",
+      "49",
+      "64",
+      "100"
+    ],
+    "answer": "49"
+  },
+  {
+    "question": "Rearrange these letters to make a word: 'O E N P H'",
+    "options": [
+      "Phone",
+      "Honey",
+      "Nepoh",
+      "Peonh"
+    ],
+    "answer": "Phone"
+  },
+  {
+    "question": "Find the missing letter: A, C, F, J, O, ?",
+    "options": [
+      "U",
+      "V",
+      "Q",
+      "W"
+    ],
+    "answer": "U"
+  },
+  {
+    "question": "Which one is the odd one out?",
+    "options": [
+      "2",
+      "3",
+      "5",
+      "9"
+    ],
+    "answer": "9"
+  }
+]
