@@ -1,15 +1,16 @@
+
 from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Optional
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+from datetime import datetime
 import json
 
 app = FastAPI()
 
-# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -32,6 +33,16 @@ class Question(Base):
     difficulty = Column(String)
     category = Column(String)
     weight = Column(Integer, default=1)
+
+class Result(Base):
+    __tablename__ = "results"
+    id = Column(Integer, primary_key=True, index=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    score = Column(Integer)
+    max_score = Column(Integer)
+    estimated_iq = Column(Integer)
+    category_scores = Column(Text)  # JSON
+    feedback = Column(Text)
 
 Base.metadata.create_all(bind=engine)
 
@@ -57,6 +68,16 @@ def get_questions(db: Session = Depends(get_db)):
         for q in db.query(Question).all()
     ]
 
+@app.get("/results")
+def get_all_results(db: Session = Depends(get_db)):
+    return db.query(Result).all()
+
+@app.get("/stats")
+def get_stats(db: Session = Depends(get_db)):
+    count = db.query(Result).count()
+    avg_iq = db.query(Result).with_entities(func.avg(Result.estimated_iq)).scalar()
+    return {"total_tests": count, "average_iq": int(avg_iq or 0)}
+
 @app.post("/submit")
 def submit_answers(payload: Dict, x_token: str = Header(...), db: Session = Depends(get_db)):
     if x_token != "user-token":
@@ -65,6 +86,7 @@ def submit_answers(payload: Dict, x_token: str = Header(...), db: Session = Depe
     total_score = 0
     max_score = 0
     log = []
+    category_scores = {}
 
     for ans in answers:
         q = db.query(Question).filter(Question.id == ans["question_id"]).first()
@@ -73,6 +95,7 @@ def submit_answers(payload: Dict, x_token: str = Header(...), db: Session = Depe
         correct = ans["selected"] == q.answer and ans["time_taken"] <= 30
         if correct:
             total_score += q.weight
+            category_scores[q.category] = category_scores.get(q.category, 0) + q.weight
         max_score += q.weight
         log.append({
             "question": q.question,
@@ -83,11 +106,36 @@ def submit_answers(payload: Dict, x_token: str = Header(...), db: Session = Depe
         })
 
     estimated_iq = 85 + int((total_score / max_score) * 60) if max_score else 85
+
+    # Feedback system
+    feedback = []
+    for cat in category_scores:
+        score = category_scores[cat]
+        if score >= 4:
+            feedback.append(f"Strong in {cat}")
+        elif score >= 2:
+            feedback.append(f"Average in {cat}")
+        else:
+            feedback.append(f"Needs improvement in {cat}")
+
+    # Save result
+    result = Result(
+        score=total_score,
+        max_score=max_score,
+        estimated_iq=estimated_iq,
+        category_scores=json.dumps(category_scores),
+        feedback=json.dumps(feedback),
+    )
+    db.add(result)
+    db.commit()
+
     return {
         "score": total_score,
         "max_score": max_score,
         "estimated_iq": estimated_iq,
-        "log": log
+        "log": log,
+        "category_scores": category_scores,
+        "feedback": feedback
     }
 
 @app.post("/admin/questions")
@@ -106,12 +154,3 @@ def add_question(q: Dict, x_token: str = Header(...), db: Session = Depends(get_
     db.commit()
     db.refresh(obj)
     return {"message": "Question added", "id": obj.id}
-
-# --- AUTO SEED ---
-import os
-if not os.path.exists("seeded.flag"):
-    from seed_questions import seed_questions
-    seed_questions()
-    with open("seeded.flag", "w") as f:
-        f.write("done")
-
