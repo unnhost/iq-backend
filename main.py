@@ -47,6 +47,6 @@ async def startup_event():
 async def root():
     return {"message": "IQ Test Backend (in-memory)"}
 
-@app.get("/question")
+@app.get("/questions")
 async def get_questions():
     return questions
