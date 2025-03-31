@@ -1,13 +1,14 @@
 
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
-from typing import Dict
+from typing import List, Dict
 
 app = FastAPI()
 
+# CORS setup
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,16 +17,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Database setup
 SQLALCHEMY_DATABASE_URL = "sqlite:///./iq_test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+# Models
 class Question(Base):
     __tablename__ = "questions"
     id = Column(Integer, primary_key=True, index=True)
     question = Column(String, nullable=False)
-    options = Column(String, nullable=False)
+    options = Column(String, nullable=False)  # JSON stringified dict
     answer = Column(String, nullable=False)
     difficulty = Column(String)
     category = Column(String)
@@ -41,12 +44,27 @@ class Result(Base):
 
 Base.metadata.create_all(bind=engine)
 
+# Dependency
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+# Routes
+@app.get("/questions")
+def get_questions(db: Session = Depends(get_db)):
+    questions = db.query(Question).all()
+    return [{
+        "id": q.id,
+        "question": q.question,
+        "options": eval(q.options),
+        "answer": q.answer,
+        "difficulty": q.difficulty,
+        "category": q.category,
+        "weight": q.weight
+    } for q in questions]
 
 @app.post("/submit")
 def submit_answers(payload: Dict, db: Session = Depends(get_db)):
