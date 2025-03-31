@@ -7,7 +7,9 @@
       "32",
       "20"
     ],
-    "answer": "32"
+    "answer": "32",
+    "category": "Logic",
+    "difficulty": "Easy"
   },
   {
     "question": "Which shape is different from the others?",
@@ -17,7 +19,9 @@
       "Triangle",
       "Apple"
     ],
-    "answer": "Apple"
+    "answer": "Apple",
+    "category": "Math",
+    "difficulty": "Medium"
   },
   {
     "question": "If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops definitely Lazzies?",
@@ -27,7 +31,9 @@
       "Cannot Say",
       "Sometimes"
     ],
-    "answer": "Yes"
+    "answer": "Yes",
+    "category": "Verbal",
+    "difficulty": "Hard"
   },
   {
     "question": "What number is missing: 1, 1, 2, 3, 5, 8, ?",
@@ -37,7 +43,9 @@
       "12",
       "15"
     ],
-    "answer": "13"
+    "answer": "13",
+    "category": "Patterns",
+    "difficulty": "Easy"
   },
   {
     "question": "Which word doesn't belong?",
@@ -47,7 +55,9 @@
       "Lion",
       "Car"
     ],
-    "answer": "Car"
+    "answer": "Car",
+    "category": "Memory",
+    "difficulty": "Medium"
   },
   {
     "question": "What comes next: J, F, M, A, M, J, J, ?",
@@ -57,7 +67,9 @@
       "O",
       "D"
     ],
-    "answer": "A"
+    "answer": "A",
+    "category": "Logic",
+    "difficulty": "Hard"
   },
   {
     "question": "Which number is a square of an odd number?",
@@ -67,7 +79,9 @@
       "64",
       "100"
     ],
-    "answer": "49"
+    "answer": "49",
+    "category": "Math",
+    "difficulty": "Easy"
   },
   {
     "question": "Rearrange these letters to make a word: 'O E N P H'",
@@ -77,7 +91,9 @@
       "Nepoh",
       "Peonh"
     ],
-    "answer": "Phone"
+    "answer": "Phone",
+    "category": "Verbal",
+    "difficulty": "Medium"
   },
   {
     "question": "Find the missing letter: A, C, F, J, O, ?",
@@ -87,7 +103,9 @@
       "Q",
       "W"
     ],
-    "answer": "U"
+    "answer": "U",
+    "category": "Patterns",
+    "difficulty": "Hard"
   },
   {
     "question": "Which one is the odd one out?",
@@ -97,6 +115,8 @@
       "5",
       "9"
     ],
-    "answer": "9"
+    "answer": "9",
+    "category": "Memory",
+    "difficulty": "Easy"
   }
 ]
