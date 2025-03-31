@@ -107,3 +107,9 @@ def submit_answers(payload: Dict, db: Session = Depends(get_db)):
         "category_scores": category_scores,
         "feedback": feedback,
     }
+
+# Auto-seed when backend boots (only once, comment this after)
+from auto_seed import seed_questions
+with next(get_db()) as db:
+    seed_questions(db)
+    
