@@ -106,3 +106,12 @@ def add_question(q: Dict, x_token: str = Header(...), db: Session = Depends(get_
     db.commit()
     db.refresh(obj)
     return {"message": "Question added", "id": obj.id}
+
+# --- AUTO SEED ---
+import os
+if not os.path.exists("seeded.flag"):
+    from seed_questions import seed_questions
+    seed_questions()
+    with open("seeded.flag", "w") as f:
+        f.write("done")
+
